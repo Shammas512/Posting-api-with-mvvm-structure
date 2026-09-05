@@ -13,7 +13,7 @@ class CheckViewmodel extends GetxController {
       if (value.token.toString() == "null" || value.token!.trim().isEmpty) {
         Timer(
           const Duration(seconds: 3),
-          () => Get.offNamed(RoutesNa me.loginScreen),
+          () => Get.offNamed(RoutesName.loginScreen),
         );
       } else {
         if (kDebugMode) {

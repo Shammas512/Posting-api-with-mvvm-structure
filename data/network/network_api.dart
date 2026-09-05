@@ -9,17 +9,28 @@ import 'package:http/http.dart' as http;
 
 class NetworkApiService extends BaseApiService {
   @override
-  Future<dynamic> getApi(String url) async {}
+  Future<dynamic> getApi(String url) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw InternetExceptions('');
+    } on TimeoutException {
+      throw RequestTimeout('');
+    }
+
+    return responseJson;
+  }
+
   @override
   Future<dynamic> postapi(String url, var data) async {
     dynamic responseJson;
 
     try {
       final response = await http.post(
-        headers: {
-          // Yeh header lazmi hai taake server ko pata chale JSON data aa raha hai
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         Uri.parse(url),
         body: jsonEncode(data),
       );
