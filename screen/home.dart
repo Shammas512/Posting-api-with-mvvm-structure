@@ -1,8 +1,12 @@
 import 'package:code_x/working/data/utils_working/common_utils.dart';
+import 'package:code_x/working/repositries/home_viewmodel.dart';
 import 'package:code_x/working/repositries/login_viewmodel.dart';
 import 'package:code_x/working/res/round.dart';
+import 'package:code_x/working/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/utils.dart';
 
 class Home extends StatefulWidget {
@@ -13,49 +17,32 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final controller2 = Get.put(HomeViewmodel());
   final controller = LoginViewmodel();
   final _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Form(
-            key: _formkey,
-            child: Column(
-              children: [
-                TextFormField(
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      CommonUtils.showsnackbar("fillout form");
-                    }
-                  },
-                  controller: controller.emailcontroller,
-                  focusNode: controller.emailFocus,
-                  decoration: InputDecoration(hintText: "email_hint".tr),
-                ),
-                SizedBox(height: 30),
-                TextFormField(
-                  controller: controller.passwordcontroller,
-                  focusNode: controller.passwordfocus,
-                  decoration: InputDecoration(hintText: "pass_hint".tr),
-                ),
-                SizedBox(height: 30),
+      appBar: AppBar(title: Text("HomeView"), centerTitle: true),
+      body: Obx(() {
+        switch (controller2.rxRequestStatus.value) {
+          case Sta.LOADING:
+            return Center(child: CircularProgressIndicator());
 
-                Roundbtn(
-                  btnText: "Login",
-                  ontap: () {
-                    if (_formkey.currentState!.validate()) {
-                       controller.loginapi();
-                    }
-                   
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+          case Sta.ERROR:
+            return Center(child: Text("Something is wrong"));
+
+          case Sta.COMPLETED:
+            return ListView.builder(
+              itemCount: controller2.userlist.value.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(controller2.userlist.value.data![index].email.toString()),
+                );
+              },
+            );
+        }
+      }),
     );
   }
 }

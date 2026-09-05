@@ -1,0 +1,1 @@
+enum Sta {LOADING,ERROR,COMPLETED}
