@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class LoginViewmodel extends GetxController {
+  RxBool isLoading = false.obs;
   TextEditingController emailcontroller = TextEditingController();
   FocusNode emailFocus = FocusNode();
   TextEditingController passwordcontroller = TextEditingController();
@@ -11,16 +12,25 @@ class LoginViewmodel extends GetxController {
   final _api = LoginRepo();
 
   void loginapi() {
+    isLoading.value = true;
     Map data = {
-      'email': emailcontroller.value.text,
-      'password': passwordcontroller.value.text,
+      'email': emailcontroller.text.trim(),
+      'password': passwordcontroller.text.trim(),
     };
     _api
         .postapi(data)
         .then((value) {
-          CommonUtils.showsnackbar("Login");
+
+          if (value["error"] == 'Note: Only defined users succeed registration') {
+            CommonUtils.showsnackbar("Enter correct Email or password");
+            isLoading.value = false;
+          } else {
+            isLoading.value = false;
+            CommonUtils.showsnackbar("Login succesfull");
+          }
         })
         .onError((error, StackTrace) {
+          isLoading.value = false;
           CommonUtils.showsnackbar(error.toString());
         });
   }

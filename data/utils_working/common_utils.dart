@@ -3,6 +3,6 @@ import 'package:get/utils.dart';
 
 class CommonUtils {
    static void showsnackbar(String message) {
-    Get.snackbar("Message", "$message succesful");
+    Get.snackbar("Message", "$message ");
   }
 }
