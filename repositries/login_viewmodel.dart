@@ -30,7 +30,7 @@ class LoginViewmodel extends GetxController {
             isLoading.value = false;
           } else {
             user.saveuser(LoginResponseModel.fromJson(value)).then((v) {
-             
+               Get.delete<LoginViewmodel>();
           
               Get.toNamed(RoutesName.homeScreen);
             });
