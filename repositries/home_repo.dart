@@ -8,9 +8,9 @@ class HomeRepo {
 
   Future<UserModel> getApi() async {
     final response = await _apiservice.getApi(Apiurl.userlisturl);
-
     if (kDebugMode) {
       print(response);
+      print("hello");
     }
     return UserModel.fromJson(response);
   }

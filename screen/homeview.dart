@@ -5,9 +5,19 @@ class Homeview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(title: Text("Home view"),
-      actions: [],),
+    return Scaffold(
+
+      appBar: AppBar(
+        title: Text("Home view"),
+        actions: [
+          IconButton(
+            onPressed: () {
+             
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
+      ),
     );
   }
 }
